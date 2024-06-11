@@ -7,6 +7,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
+
 const MoviesList = (props) => {
   const [movies, setMovies] = useState([]);
   const [searchTitle, setSearchTitle] = useState("");
@@ -17,21 +18,21 @@ const MoviesList = (props) => {
   const [entriesPerPage, setEntriesPerPage] = useState(0);
   const [currentSearchMode, setCurrentSearchMode] = useState("");
 
-  useEffect(() =>{  
+  useEffect(() => {  
     setCurrentPage(0); 
-    },[currentSearchMode]);
+  }, [currentSearchMode]);
 
-    useEffect(() =>{    
+  useEffect(() => {    
     retrieveNextPage();     
-    },[currentPage]) 
+  }, [currentPage]) 
 
-    useEffect(() => {
-        retrieveMovies();
-        retrieveRatings();
-    }, []);
+  useEffect(() => {
+    retrieveMovies();
+    retrieveRatings();
+  }, []);
 
   const retrieveMovies = () => {
-    setCurrentSearchMode("")
+    setCurrentSearchMode("");
     MovieDataService.getAll(currentPage)
       .then((response) => {
         console.log(response.data);
@@ -43,11 +44,13 @@ const MoviesList = (props) => {
         console.log(e);
       });
   };
+
   const retrieveNextPage = () => {
     if (currentSearchMode === "findByTitle") findByTitle();
     else if (currentSearchMode === "findByRating") findByRating();
     else retrieveMovies();
   };
+
   const retrieveRatings = () => {
     MovieDataService.getRatings()
       .then((response) => {
@@ -59,16 +62,19 @@ const MoviesList = (props) => {
         console.log(e);
       });
   };
+
   const onChangeSearchTitle = (e) => {
     const searchTitle = e.target.value;
     setSearchTitle(searchTitle);
   };
+
   const onChangeSearchRating = (e) => {
     const searchRating = e.target.value;
     setSearchRating(searchRating);
   };
+
   const find = (query, by) => {
-    MovieDataService.find(query, by,currentPage)
+    MovieDataService.find(query, by, currentPage)
       .then((response) => {
         console.log(response.data);
         setMovies(response.data.movies);
@@ -77,18 +83,21 @@ const MoviesList = (props) => {
         console.log(e);
       });
   };
+
   const findByTitle = () => {
-    setCurrentSearchMode("findByTitle")
+    setCurrentSearchMode("findByTitle");
     find(searchTitle, "title");
   };
+
   const findByRating = () => {
-    setCurrentSearchMode("findByRating")
+    setCurrentSearchMode("findByRating");
     if (searchRating === "All Ratings") {
       retrieveMovies();
     } else {
       find(searchRating, "rated");
     }
   };
+
   return (
     <div className="App">
       <Container>
@@ -110,8 +119,8 @@ const MoviesList = (props) => {
             <Col>
               <Form.Group>
                 <Form.Control as="select" onChange={onChangeSearchRating}>
-                  {ratings.map((rating) => {
-                    return <option value={rating}>{rating}</option>;
+                  {ratings.map((rating, index) => {
+                    return <option key={index} value={rating}>{rating}</option>;
                   })}
                 </Form.Control>
               </Form.Group>
@@ -124,7 +133,7 @@ const MoviesList = (props) => {
         <Row>
           {movies.map((movie) => {
             return (
-              <Col>
+              <Col key={movie._id}>
                 <Card style={{ width: "18rem" }}>
                   <Card.Img src={movie.poster + "/100px180"} />
                   <Card.Body>
@@ -152,4 +161,5 @@ const MoviesList = (props) => {
     </div>
   );
 };
+
 export default MoviesList;

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import MovieDataService from '../services/movies'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import MovieDataService from '../services/movies';
+import { Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Image from 'react-bootstrap/Image';
@@ -36,16 +36,16 @@ const Movie = props => {
         MovieDataService.deleteReview(reviewId, props.user.id)
             .then(response => {
                 setMovie((prevState) => {
-                    prevState.reviews.splice(index, 1)
+                    prevState.reviews.splice(index, 1);
                     return ({
                         ...prevState
-                    })
-                })
+                    });
+                });
             })
             .catch(e => {
-                console.log(e)
-            })
-    }
+                console.log(e);
+            });
+    };
 
     return (
         <div>
@@ -67,9 +67,9 @@ const Movie = props => {
                                     </Link>}
                             </Card.Body>
                         </Card>
-                        <br></br>
+                        <br />
                         <h2>Reviews</h2>
-                        <br></br>
+                        <br />
                         {movie.reviews.map((review, index) => {
                             return (
                                 <Card key={index} className="mb-2">
